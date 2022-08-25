@@ -6,7 +6,10 @@ use core::panic::PanicInfo;
 pub fn send(buf: impl AsRef<[u8]>) -> isize {
     let buf = buf.as_ref();
     let res = unsafe {
-        core::mem::transmute::<usize, extern fn(*const u8, usize) -> isize>(0x1234)(buf.as_ptr(), buf.len())
+        core::mem::transmute::<usize, extern "C" fn(*const u8, usize) -> isize>(0x1234)(
+            buf.as_ptr(),
+            buf.len(),
+        )
     };
 
     res
